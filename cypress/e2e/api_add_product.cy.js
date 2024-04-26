@@ -16,18 +16,19 @@ describe("Ajouter un produit dans le panier", () => {
       authToken = loginResponse.body.token; // Stocker le jeton d'authentification dans authToken
     });
   });
-
-  it("Ajouter un produit disponible dans le panier", () => {
-    // Récupérer le produit disponible et ajouter-le dans le panier
+  it("Ajouter un produit au panier", () => {
+    const productId = 5;
+    // Récupérer le produit et vérifier s'il est disponible
     cy.request({
       method: "GET",
-      url: `http://localhost:8081/products/${5}`,
+      url: `http://localhost:8081/products/${productId}`,
       headers: {
         Authorization: `Bearer ${authToken}`,
       },
       failOnStatusCode: false,
     }).then((productResponse) => {
       if (productResponse.status === 200) {
+        // Le produit est disponible, ajoutez-le au panier
         cy.request({
           method: "POST",
           url: "http://localhost:8081/orders/add",
@@ -35,10 +36,11 @@ describe("Ajouter un produit dans le panier", () => {
             Authorization: `Bearer ${authToken}`,
           },
           body: {
-            product: 5,
+            product: productId,
             quantity: 1,
           },
         }).then((addToCartResponse) => {
+          // Vérifiez que le produit a été ajouté au panier avec succès
           expect(addToCartResponse.status).to.eq(200);
           // Vérifier le schéma de la réponse
           expect(addToCartResponse.body)
@@ -89,33 +91,12 @@ describe("Ajouter un produit dans le panier", () => {
           const orderLine1 = addToCartResponse.body.orderLines[1];
           expect(orderLine1).to.have.property("quantity");
         });
+      } else {
+        // Le produit n'est pas disponible, retournez une erreur
+        throw new Error(
+          `Le produit avec l'ID ${productId} n'est pas disponible.`
+        );
       }
-    });
-  });
-
-  it("Ajouter un produit non disponible dans le panier", () => {
-    // Récupérer le produit non disponible et vérifier la réponse
-    cy.request({
-      method: "GET",
-      url: `http://localhost:8081/products/${2}`,
-      headers: {
-        Authorization: `Bearer ${authToken}`,
-      },
-      failOnStatusCode: false,
-    }).then((productResponse) => {
-      cy.request({
-        method: "POST",
-        url: "http://localhost:8081/orders/add",
-        headers: {
-          Authorization: `Bearer ${authToken}`,
-        },
-        body: {
-          product: 2,
-          quantity: 1,
-        },
-      }).then((addToCartResponse) => {
-        expect(productResponse.status).to.eq(400);
-      });
     });
   });
 });

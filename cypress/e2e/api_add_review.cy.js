@@ -110,7 +110,7 @@ describe("Ajouter un avis", () => {
   it("Ajouter un avis sans titre", () => {
     const ReviewData = {
       title: "",
-      comment: "test", 
+      comment: "test",
       rating: 1,
     };
 
@@ -121,7 +121,7 @@ describe("Ajouter un avis", () => {
       headers: {
         Authorization: `Bearer ${Cypress.env("authToken")}`,
       },
-      body:ReviewData,
+      body: ReviewData,
       failOnStatusCode: false, // Ne pas échouer sur le code d'état de réponse
     }).then((addReviewResponse) => {
       cy.log("Response:", addReviewResponse.body);

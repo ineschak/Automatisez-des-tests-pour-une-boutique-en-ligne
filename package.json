@@ -5,19 +5,11 @@
   "main": "cypress.config.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "cy:report": "cypress run --reporter mochawesome"
+    "cypress:open": "cypress open"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "cypress": "^13.8.1",
-    "mochawesome": "^7.1.3"
-  },
-  "reporter": "cypress-mochawesome-reporter",
-  "reporterOptions": {
-    "reportDir": "cypress/reports",
-    "overwrite": false,
-    "html": true,
-    "json": true
+    "cypress": "^13.8.1"
   }
 }
