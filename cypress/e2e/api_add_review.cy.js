@@ -91,7 +91,7 @@ describe("Ajouter un avis", () => {
       rating: 1,
     };
 
-    // Envoyer une requête POST pour ajouter un avis sans titre
+    // Envoyer une requête POST pour ajouter un avis malveillant
     cy.request({
       method: "POST",
       url: apiUrl + "/reviews",
